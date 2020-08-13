@@ -1,4 +1,4 @@
-package br.com.renato.ecommerce.model.entity.pedido;
+package br.com.renato.ecommerce.model.dto.entity.pedido;
 
 import java.util.Date;
 import java.util.List;
@@ -15,7 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import br.com.renato.ecommerce.model.entity.cliente.Cliente;
+import br.com.renato.ecommerce.model.dto.entity.cliente.Cliente;
 
 @Entity
 public class Pedido {
@@ -33,11 +33,19 @@ public class Pedido {
 	@JoinColumn(name = "idCliente", referencedColumnName = "id")
 	private Cliente cliente;
 
-	@OneToMany
-	@JoinColumn(name = "idPedido", referencedColumnName = "id", insertable = false, updatable = false)
+	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinColumn(name = "idPedido", referencedColumnName = "id")
 	private List<ProdutoPedido> produtos;
 
 	public Pedido() {
+	}
+	
+	public Pedido(String id, Date dataCadastro, PedidoStatus status, Cliente cliente) {
+		super();
+		this.id = id;
+		this.dataCadastro = dataCadastro;
+		this.status = status;
+		this.cliente = cliente;
 	}
 
 	public String getId() {

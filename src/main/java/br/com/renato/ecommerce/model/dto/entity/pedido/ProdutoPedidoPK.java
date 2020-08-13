@@ -1,4 +1,4 @@
-package br.com.renato.ecommerce.model.entity.pedido;
+package br.com.renato.ecommerce.model.dto.entity.pedido;
 
 import java.io.Serializable;
 

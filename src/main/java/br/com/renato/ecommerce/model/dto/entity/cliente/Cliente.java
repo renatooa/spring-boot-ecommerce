@@ -1,4 +1,4 @@
-package br.com.renato.ecommerce.model.entity.cliente;
+package br.com.renato.ecommerce.model.dto.entity.cliente;
 
 import java.util.Date;
 
@@ -24,6 +24,14 @@ public class Cliente {
 	private ClienteStatus status;
 
 	public Cliente() {
+	}
+	
+	public Cliente(String id, String nome, Date dataCadastro, ClienteStatus status) {
+		super();
+		this.id = id;
+		this.nome = nome;
+		this.dataCadastro = dataCadastro;
+		this.status = status;
 	}
 
 	public String getId() {

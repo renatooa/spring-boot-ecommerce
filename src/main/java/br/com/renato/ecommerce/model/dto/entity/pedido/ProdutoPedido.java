@@ -1,4 +1,4 @@
-package br.com.renato.ecommerce.model.entity.pedido;
+package br.com.renato.ecommerce.model.dto.entity.pedido;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -6,7 +6,7 @@ import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import br.com.renato.ecommerce.model.entity.Produto;
+import br.com.renato.ecommerce.model.dto.entity.Produto;
 
 @Entity
 @IdClass(ProdutoPedidoPK.class)
@@ -25,6 +25,14 @@ public class ProdutoPedido {
 	private Produto produto;
 	
 	public ProdutoPedido() {
+	}
+	
+	public ProdutoPedido(String idPedido, String idProduto, Integer quantidade, Produto produto) {
+		super();
+		this.idPedido = idPedido;
+		this.idProduto = idProduto;
+		this.quantidade = quantidade;
+		this.produto = produto;
 	}
 
 	public String getIdPedido() {

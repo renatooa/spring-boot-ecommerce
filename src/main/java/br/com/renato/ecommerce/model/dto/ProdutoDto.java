@@ -1,21 +1,25 @@
-package br.com.renato.ecommerce.model.entity;
+package br.com.renato.ecommerce.model.dto;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import br.com.renato.ecommerce.model.dto.entity.Produto;
 
-@Entity
-public class Produto {
-	
-	@Id
+public class ProdutoDto {
+
 	private String id;
-	
+
 	private String nome;
-	
+
 	private Double valor;
-	
+
 	private boolean disponivel = true;
-	
-	public Produto() {
+
+	public ProdutoDto() {
+	}
+
+	public ProdutoDto(Produto produto) {
+		this.id = produto.getId();
+		this.nome = produto.getNome();
+		this.valor = produto.getValor();
+		this.disponivel = produto.isDisponivel();
 	}
 
 	public String getId() {
