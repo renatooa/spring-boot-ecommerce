@@ -1,6 +1,6 @@
 package br.com.renato.ecommerce.model.dto.entity.pedido;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -12,8 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import br.com.renato.ecommerce.model.dto.entity.cliente.Cliente;
 
@@ -23,8 +21,7 @@ public class Pedido {
 	@Id
 	private String id;
 
-	@Temporal(TemporalType.DATE)
-	private Date dataCadastro;
+	private LocalDateTime dataCadastro;
 
 	@Enumerated(EnumType.STRING)
 	private PedidoStatus status;
@@ -40,7 +37,7 @@ public class Pedido {
 	public Pedido() {
 	}
 	
-	public Pedido(String id, Date dataCadastro, PedidoStatus status, Cliente cliente) {
+	public Pedido(String id, LocalDateTime dataCadastro, PedidoStatus status, Cliente cliente) {
 		super();
 		this.id = id;
 		this.dataCadastro = dataCadastro;
@@ -56,11 +53,11 @@ public class Pedido {
 		this.id = id;
 	}
 
-	public Date getDataCadastro() {
+	public LocalDateTime getDataCadastro() {
 		return dataCadastro;
 	}
 
-	public void setDataCadastro(Date dataCadastro) {
+	public void setDataCadastro(LocalDateTime dataCadastro) {
 		this.dataCadastro = dataCadastro;
 	}
 

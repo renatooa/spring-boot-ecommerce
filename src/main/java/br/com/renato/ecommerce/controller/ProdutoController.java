@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.renato.ecommerce.model.dto.ProdutoDto;
 import br.com.renato.ecommerce.model.exception.NaoEncontradoException;
-import br.com.renato.ecommerce.model.servicos.ProdutoRecursos;
+import br.com.renato.ecommerce.model.recursos.ProdutoRecursos;
 import br.com.renato.ecommerce.service.ProdutoService;
 
 @RestController()
@@ -22,6 +22,7 @@ public class ProdutoController implements ProdutoRecursos {
 	private ProdutoService produtoService;
 
 	@GetMapping
+	@Override
 	public List<ProdutoDto> listarProdutos() throws NaoEncontradoException {
 		return produtoService.listarProdutos();
 	}

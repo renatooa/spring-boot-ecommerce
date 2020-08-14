@@ -1,4 +1,4 @@
-package br.com.renato.ecommerce.model.servicos;
+package br.com.renato.ecommerce.model.recursos;
 
 import java.util.List;
 

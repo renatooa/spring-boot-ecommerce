@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.renato.ecommerce.model.dto.PedidoDto;
 import br.com.renato.ecommerce.model.exception.NaoEncontradoException;
-import br.com.renato.ecommerce.model.servicos.PedidoRecursos;
+import br.com.renato.ecommerce.model.recursos.PedidoRecursos;
 import br.com.renato.ecommerce.service.PedidoService;
 
 @RestController()
@@ -23,24 +23,12 @@ public class PedidoController implements PedidoRecursos {
 	@Autowired
 	private PedidoService pedidoService;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see br.com.renato.ecommerce.controller.PedidoServicos#listarPedidos()
-	 */
 	@Override
 	@GetMapping
 	public List<PedidoDto> listarPedidos(@RequestParam(name = "status-entrega", required = true) String statusEntrega)
 			throws NaoEncontradoException {
 		return pedidoService.listarPedidos(statusEntrega);
 	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see br.com.renato.ecommerce.controller.PedidoServicos#obterPedido(java.lang.
-	 * String)
-	 */
 	@Override
 	@GetMapping(path = "/{idPedido}")
 	public PedidoDto obterPedido(@PathVariable(required = true) String idPedido) throws NaoEncontradoException {

@@ -22,7 +22,7 @@ import br.com.renato.ecommerce.model.dto.ClienteDto;
 import br.com.renato.ecommerce.model.dto.MensagemDto;
 import br.com.renato.ecommerce.model.dto.PedidoDto;
 import br.com.renato.ecommerce.model.exception.NaoEncontradoException;
-import br.com.renato.ecommerce.model.servicos.ClienteRecursos;
+import br.com.renato.ecommerce.model.recursos.ClienteRecursos;
 import br.com.renato.ecommerce.service.ClienteService;
 
 @RestController()
@@ -57,8 +57,8 @@ public class ClienteController implements ClienteRecursos {
 	@Override
 	@Transactional
 	@PutMapping(path = "/{idCliente}")
-	public ResponseEntity<MensagemDto> atualizarCliente(@RequestBody(required = true) ClienteDto clienteDto,
-			@PathVariable(required = true) String idCliente) {
+	public ResponseEntity<MensagemDto> atualizarCliente(@RequestBody(required = true) @Valid ClienteDto clienteDto,
+			@PathVariable(required = true) String idCliente) throws NaoEncontradoException {
 
 		return clienteService.atualizarCliente(clienteDto, idCliente);
 	}

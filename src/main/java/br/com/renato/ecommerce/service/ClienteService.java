@@ -19,7 +19,7 @@ import br.com.renato.ecommerce.model.dto.entity.cliente.Cliente;
 import br.com.renato.ecommerce.model.dto.entity.cliente.ClienteStatus;
 import br.com.renato.ecommerce.model.dto.entity.pedido.Pedido;
 import br.com.renato.ecommerce.model.exception.NaoEncontradoException;
-import br.com.renato.ecommerce.model.servicos.ClienteRecursos;
+import br.com.renato.ecommerce.model.recursos.ClienteRecursos;
 import br.com.renato.ecommerce.repository.ClienteRepository;
 import br.com.renato.ecommerce.repository.PedidoRepository;
 import br.com.renato.ecommerce.repository.ProdutoRepository;
@@ -41,19 +41,27 @@ public class ClienteService implements ClienteRecursos {
 
 	@Override
 	public List<ClienteDto> listarClientes(String status, Sort ordem) throws NaoEncontradoException {
-		List<Cliente> clientes = new ArrayList<Cliente>();
 
-		if (status == null) {
-			clientes.addAll(clienteRepository.findAll(ordem));
-		} else {
-			clientes.addAll(clienteRepository.findByStatus(ClienteStatus.valueOf(status.toUpperCase()), ordem));
-		}
+		List<Cliente> clientes = recuperarClientes(status, ordem);
 
 		if (clientes.isEmpty()) {
 			throw new NaoEncontradoException();
 		}
 
 		return clientes.stream().map(ClienteDto::new).collect(Collectors.toList());
+	}
+
+	private List<Cliente> recuperarClientes(String status, Sort ordem) {
+
+		List<Cliente> clientes = new ArrayList<Cliente>();
+
+		if (status == null) {
+			clientes.addAll(clienteRepository.findAll(ordem));
+		} else {
+			clientes.addAll(clienteRepository
+					.findByStatus(ClienteStatus.valueOf(status.toUpperCase(), ClienteStatus.OUTRO), ordem));
+		}
+		return clientes;
 	}
 
 	@Override
@@ -74,16 +82,23 @@ public class ClienteService implements ClienteRecursos {
 
 		clienteRepository.save(cliente);
 
-		URI uri = uriBuilder.path("/clientes/{idCliente}").buildAndExpand(cliente.getId()).toUri();
+		String path = "/clientes/{idCliente}";
+
+		URI uri = criarUri(uriBuilder, path, cliente.getId());
 
 		return ResponseEntity.created(uri).body(new MensagemDto());
 	}
 
 	@Override
-	public ResponseEntity<MensagemDto> atualizarCliente(ClienteDto clienteDto, String idCliente) {
-		Cliente cliente = clienteRepository.findById(idCliente).get();
+	public ResponseEntity<MensagemDto> atualizarCliente(ClienteDto clienteDto, String idCliente)
+			throws NaoEncontradoException {
+		Optional<Cliente> cliente = clienteRepository.findById(idCliente);
 
-		clienteDto.atualizar(cliente);
+		if (!cliente.isPresent()) {
+			throw new NaoEncontradoException();
+		}
+
+		clienteDto.atualizar(cliente.get());
 
 		return ResponseEntity.ok().body(new MensagemDto());
 	}
@@ -106,8 +121,17 @@ public class ClienteService implements ClienteRecursos {
 
 		pedidpRepository.save(pedido);
 
-		URI uri = uriBuilder.path("/pedidos/{idPedido}").buildAndExpand(pedido.getId()).toUri();
+		String path = "/pedidos/{idPedido}";
+
+		URI uri = criarUri(uriBuilder, path, pedido.getId());
 
 		return ResponseEntity.created(uri).body(new MensagemDto());
+	}
+
+	private URI criarUri(UriComponentsBuilder uriBuilder, String path, String id) {
+
+		URI uri = uriBuilder.path(path).buildAndExpand(id).toUri();
+
+		return uri;
 	}
 }

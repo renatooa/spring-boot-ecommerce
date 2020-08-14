@@ -1,8 +1,10 @@
 package br.com.renato.ecommerce.model.dto;
 
+import java.text.MessageFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotBlank;
@@ -16,6 +18,7 @@ import br.com.renato.ecommerce.model.dto.entity.cliente.Cliente;
 import br.com.renato.ecommerce.model.dto.entity.pedido.Pedido;
 import br.com.renato.ecommerce.model.dto.entity.pedido.PedidoStatus;
 import br.com.renato.ecommerce.model.dto.entity.pedido.ProdutoPedido;
+import br.com.renato.ecommerce.model.exception.ElementoNaoEncontradoException;
 import br.com.renato.ecommerce.repository.ClienteRepository;
 import br.com.renato.ecommerce.repository.ProdutoRepository;
 
@@ -31,8 +34,8 @@ public class PedidoDto {
 
 	@NotNull
 	@JsonProperty("data-cadastro")
-	@JsonFormat(pattern = "dd/MM/yyyy")
-	private Date dataCadastro;
+	@JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
+	private LocalDateTime dataCadastro;
 
 	@NotNull
 	@NotBlank
@@ -70,11 +73,11 @@ public class PedidoDto {
 		this.idCliente = idCliente;
 	}
 
-	public Date getDataCadastro() {
+	public LocalDateTime getDataCadastro() {
 		return dataCadastro;
 	}
 
-	public void setDataCadastro(Date dataCadastro) {
+	public void setDataCadastro(LocalDateTime dataCadastro) {
 		this.dataCadastro = dataCadastro;
 	}
 
@@ -96,21 +99,36 @@ public class PedidoDto {
 
 	public Pedido toPedido(String idCliente, ClienteRepository clienteRepository, ProdutoRepository produtoRepository) {
 
-		Cliente cliente = clienteRepository.findById(idCliente).get();
+		Optional<Cliente> cliente = clienteRepository.findById(idCliente);
+
+		if (!cliente.isPresent()) {
+			throw new ElementoNaoEncontradoException(MessageFormat.format("Cliente {0} não encontrado", idCliente));
+		}
 
 		Pedido pedido = new Pedido(getId(), getDataCadastro(), PedidoStatus.valueOf(getStatusEntrega().toUpperCase()),
-				cliente);
+				cliente.get());
 
+		inserirProdutos(produtoRepository, pedido);
+
+		return pedido;
+	}
+
+	private void inserirProdutos(ProdutoRepository produtoRepository, Pedido pedido) {
 		List<ProdutoPedido> produtos = new ArrayList<ProdutoPedido>();
 
 		this.produtos.forEach(produtoPedidoDto -> {
-			Produto produto = produtoRepository.findById(produtoPedidoDto.getProduto().getId()).get();
 
-			produtos.add(new ProdutoPedido(pedido.getId(), produto.getId(), produtoPedidoDto.getQuantidade(), produto));
+			Optional<Produto> produto = produtoRepository.findById(produtoPedidoDto.getProduto().getId());
+
+			if (!produto.isPresent()) {
+				throw new ElementoNaoEncontradoException(
+						MessageFormat.format("Produto {0} não encontrado", produtoPedidoDto.getProduto().getId()));
+			}
+
+			produtos.add(new ProdutoPedido(pedido.getId(), produto.get().getId(), produtoPedidoDto.getQuantidade(),
+					produto.get()));
 		});
 
 		pedido.setProdutos(produtos);
-
-		return pedido;
 	}
 }

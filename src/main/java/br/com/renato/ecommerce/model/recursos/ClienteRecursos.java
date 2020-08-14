@@ -1,4 +1,4 @@
-package br.com.renato.ecommerce.model.servicos;
+package br.com.renato.ecommerce.model.recursos;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public interface ClienteRecursos {
 
 	public ResponseEntity<MensagemDto> inserirCliente(ClienteDto clienteDto, UriComponentsBuilder uriBuilder);
 
-	public ResponseEntity<MensagemDto> atualizarCliente(ClienteDto clienteDto, String idCliente);
+	public ResponseEntity<MensagemDto> atualizarCliente(ClienteDto clienteDto, String idCliente) throws NaoEncontradoException;
 
 	public List<PedidoDto> listarPedidosCliente(String idCliente) throws NaoEncontradoException;
 

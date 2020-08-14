@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import br.com.renato.ecommerce.model.dto.MensagemDto;
-import br.com.renato.ecommerce.model.exception.NaoAutorizadoException;
+import br.com.renato.ecommerce.model.exception.ElementoNaoEncontradoException;
 import br.com.renato.ecommerce.model.exception.NaoEncontradoException;
 
 @RestControllerAdvice
@@ -24,14 +24,20 @@ public class ExceptionHandler {
 	@Autowired
 	private MessageSource messageSource;
 
-	@ResponseStatus(code = HttpStatus.UNAUTHORIZED)
-	@org.springframework.web.bind.annotation.ExceptionHandler
-	public void ex(NaoAutorizadoException naoAutorizadoException) {
-	}
-
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
 	@org.springframework.web.bind.annotation.ExceptionHandler
-	public void ex(NaoEncontradoException naoEncontradoException) {
+	public void handle(NaoEncontradoException naoEncontradoException) {
+	}
+
+	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
+	@org.springframework.web.bind.annotation.ExceptionHandler
+	public MensagemDto handle(ElementoNaoEncontradoException elementoNaoAutorizadoException) {
+
+		MensagemDto mensagemDto = criarMensagemDto(HttpStatus.BAD_REQUEST);
+
+		mensagemDto.setDescricao(criarDescricao(elementoNaoAutorizadoException));
+
+		return mensagemDto;
 	}
 
 	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
@@ -43,6 +49,15 @@ public class ExceptionHandler {
 		MensagemDto mensagemDto = criarMensagemDto(listaErros);
 
 		return mensagemDto;
+	}
+
+	@ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
+	@org.springframework.web.bind.annotation.ExceptionHandler
+	public MensagemDto handle(Throwable throwable) {
+
+		String descricao = criarDescricao(throwable);
+
+		return new MensagemDto(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), false, descricao);
 	}
 
 	private List<String> extrairListaErros(List<FieldError> fieldErrors) {
@@ -61,18 +76,15 @@ public class ExceptionHandler {
 
 	private MensagemDto criarMensagemDto(List<String> listaErros) {
 
-		MensagemDto mensagemDto = new MensagemDto(HttpStatus.BAD_REQUEST.getReasonPhrase(), false);
+		MensagemDto mensagemDto = criarMensagemDto(HttpStatus.BAD_REQUEST);
 		mensagemDto.setDescricao(listaErros.stream().collect(Collectors.joining(", ")));
+
 		return mensagemDto;
 	}
 
-	@ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
-	@org.springframework.web.bind.annotation.ExceptionHandler
-	public MensagemDto handle(Throwable throwable) {
-
-		String descricao = criarDescricao(throwable);
-
-		return new MensagemDto(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), false, descricao);
+	private MensagemDto criarMensagemDto(HttpStatus httpStatus) {
+		MensagemDto mensagemDto = new MensagemDto(httpStatus.getReasonPhrase(), httpStatus.is2xxSuccessful());
+		return mensagemDto;
 	}
 
 	private String criarDescricao(Throwable throwable) {

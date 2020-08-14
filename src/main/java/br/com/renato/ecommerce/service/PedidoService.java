@@ -11,7 +11,7 @@ import br.com.renato.ecommerce.model.dto.PedidoDto;
 import br.com.renato.ecommerce.model.dto.entity.pedido.Pedido;
 import br.com.renato.ecommerce.model.dto.entity.pedido.PedidoStatus;
 import br.com.renato.ecommerce.model.exception.NaoEncontradoException;
-import br.com.renato.ecommerce.model.servicos.PedidoRecursos;
+import br.com.renato.ecommerce.model.recursos.PedidoRecursos;
 import br.com.renato.ecommerce.repository.PedidoRepository;
 
 @Service

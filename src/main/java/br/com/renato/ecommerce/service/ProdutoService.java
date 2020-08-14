@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import br.com.renato.ecommerce.model.dto.ProdutoDto;
 import br.com.renato.ecommerce.model.dto.entity.Produto;
 import br.com.renato.ecommerce.model.exception.NaoEncontradoException;
-import br.com.renato.ecommerce.model.servicos.ProdutoRecursos;
+import br.com.renato.ecommerce.model.recursos.ProdutoRecursos;
 import br.com.renato.ecommerce.repository.ProdutoRepository;
 
 @Service
