@@ -12,3 +12,5 @@ Consta no projeto o arquivo data.sql, este arquivo é responsável pela criaçã
 
 ### Teste da WebApi
 Siga as orientaçõe para o teste da Web API, disponível na Tag [teste-web-api](https://github.com/renatooa/spring-boot-ecommerce/releases/tag/teste-web-api)
+
+O projeto fui constituído utilizando o Eclipse
