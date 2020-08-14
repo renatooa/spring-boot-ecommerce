@@ -22,30 +22,26 @@ import br.com.renato.ecommerce.model.dto.ClienteDto;
 import br.com.renato.ecommerce.model.dto.MensagemDto;
 import br.com.renato.ecommerce.model.dto.PedidoDto;
 import br.com.renato.ecommerce.model.exception.NaoEncontradoException;
-import br.com.renato.ecommerce.model.recursos.ClienteRecursos;
 import br.com.renato.ecommerce.service.ClienteService;
 
 @RestController()
 @CrossOrigin(origins = "*")
 @RequestMapping("/clientes")
-public class ClienteController implements ClienteRecursos {
+public class ClienteController {
 
 	@Autowired
 	private ClienteService clienteService;
 
-	@Override
 	@GetMapping()
 	public List<ClienteDto> listarClientes(String status, Sort ordem) throws NaoEncontradoException {
 		return clienteService.listarClientes(status, ordem);
 	}
 
-	@Override
 	@GetMapping(path = "/{idCliente}")
 	public ClienteDto obterCLiente(@PathVariable(required = true) String idCliente) throws NaoEncontradoException {
 		return clienteService.obterCLiente(idCliente);
 	}
 
-	@Override
 	@PostMapping
 	@Transactional
 	public ResponseEntity<MensagemDto> inserirCliente(@RequestBody(required = true) @Valid ClienteDto clienteDto,
@@ -54,7 +50,6 @@ public class ClienteController implements ClienteRecursos {
 		return clienteService.inserirCliente(clienteDto, uriBuilder);
 	}
 
-	@Override
 	@Transactional
 	@PutMapping(path = "/{idCliente}")
 	public ResponseEntity<MensagemDto> atualizarCliente(@RequestBody(required = true) @Valid ClienteDto clienteDto,
@@ -63,7 +58,6 @@ public class ClienteController implements ClienteRecursos {
 		return clienteService.atualizarCliente(clienteDto, idCliente);
 	}
 
-	@Override
 	@GetMapping(path = "/{idCliente}/pedidos")
 	public List<PedidoDto> listarPedidosCliente(@PathVariable(required = true) String idCliente)
 			throws NaoEncontradoException {
@@ -71,7 +65,6 @@ public class ClienteController implements ClienteRecursos {
 		return clienteService.listarPedidosCliente(idCliente);
 	}
 
-	@Override
 	@Transactional
 	@PostMapping(path = "/{idCliente}/pedidos")
 	public ResponseEntity<MensagemDto> inserirPedido(@RequestBody(required = true) @Valid PedidoDto pedidoDto,
