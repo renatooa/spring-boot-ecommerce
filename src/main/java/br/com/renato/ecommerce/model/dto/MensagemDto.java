@@ -11,6 +11,19 @@ public class MensagemDto {
 		this.sucesso = true;
 		this.descricao = "ok";
 	}
+	
+	public MensagemDto(String mensagem, boolean sucesso, String descricao) {
+		super();
+		this.mensagem = mensagem;
+		this.sucesso = sucesso;
+		this.descricao = descricao;
+	}
+	
+	public MensagemDto(String mensagem, boolean sucesso) {
+		super();
+		this.mensagem = mensagem;
+		this.sucesso = sucesso;
+	}
 
 	public String getMensagem() {
 		return mensagem;

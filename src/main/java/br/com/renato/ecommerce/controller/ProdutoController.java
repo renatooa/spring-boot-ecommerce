@@ -8,19 +8,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.renato.ecommerce.model.dto.entity.Produto;
-import br.com.renato.ecommerce.repository.ProdutoRepository;
+import br.com.renato.ecommerce.model.dto.ProdutoDto;
+import br.com.renato.ecommerce.model.exception.NaoEncontradoException;
+import br.com.renato.ecommerce.model.servicos.ProdutoRecursos;
+import br.com.renato.ecommerce.service.ProdutoService;
 
 @RestController()
 @CrossOrigin(origins = "*")
 @RequestMapping("/produtos")
-public class ProdutoController {
+public class ProdutoController implements ProdutoRecursos {
 
 	@Autowired
-	private ProdutoRepository produtoRepository;
+	private ProdutoService produtoService;
 
 	@GetMapping
-	public List<Produto> listarProdutos() {
-		return produtoRepository.findAll();
+	public List<ProdutoDto> listarProdutos() throws NaoEncontradoException {
+		return produtoService.listarProdutos();
 	}
 }

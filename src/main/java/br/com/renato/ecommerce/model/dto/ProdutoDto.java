@@ -1,13 +1,21 @@
 package br.com.renato.ecommerce.model.dto;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 import br.com.renato.ecommerce.model.dto.entity.Produto;
 
 public class ProdutoDto {
 
+	@NotNull
+	@NotBlank
 	private String id;
 
+	@NotNull
+	@NotBlank
 	private String nome;
 
+	@NotNull
 	private Double valor;
 
 	private boolean disponivel = true;

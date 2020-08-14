@@ -5,6 +5,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -18,17 +21,25 @@ import br.com.renato.ecommerce.repository.ProdutoRepository;
 
 public class PedidoDto {
 
+	@NotNull
+	@NotBlank
 	private String id;
 
+	@NotNull
+	@NotBlank
 	private String idCliente;
 
+	@NotNull
 	@JsonProperty("data-cadastro")
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	private Date dataCadastro;
 
+	@NotNull
+	@NotBlank
 	@JsonProperty("status-entrega")
 	private String statusEntrega;
 
+	@NotNull
 	private List<ProdutoPedidoDto> produtos;
 
 	public PedidoDto() {

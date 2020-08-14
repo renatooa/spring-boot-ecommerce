@@ -1,10 +1,15 @@
 package br.com.renato.ecommerce.model.dto;
 
+import javax.validation.constraints.NotNull;
+
 import br.com.renato.ecommerce.model.dto.entity.pedido.ProdutoPedido;
 
 public class ProdutoPedidoDto {
 
+	@NotNull
 	private ProdutoDto produto;
+
+	@NotNull
 	private Integer quantidade;
 
 	public ProdutoPedidoDto() {

@@ -2,7 +2,9 @@ package br.com.renato.ecommerce.model.dto;
 
 import java.util.Date;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -11,14 +13,21 @@ import br.com.renato.ecommerce.model.dto.entity.cliente.ClienteStatus;
 
 public class ClienteDto {
 
+	@NotNull
+	@NotBlank
 	private String id;
 
+	@NotNull
+	@NotBlank
 	private String nome;
 
+	@NotNull
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	@JsonProperty("data-cadastro")
 	private Date dataCadastro;
-
+	
+	@NotNull
+	@NotBlank
 	private String status;
 
 	public ClienteDto() {
